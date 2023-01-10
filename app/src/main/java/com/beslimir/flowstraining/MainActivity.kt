@@ -19,6 +19,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel = viewModel<MyViewModel>()
             val timeFlow = viewModel.countDownFlow.collectAsState(initial = 10)
+            val timeStateFlow = viewModel.stateFlow.collectAsState()
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     Text(text = timeFlow.value.toString())
                 }
 
-                //live data
+                //LiveData
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
@@ -52,7 +53,24 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                
+                //StateFlow
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.triggerStateFlow()
+                        }
+                    ) {
+                        Text(text = "StateFlow Button")
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = timeStateFlow.value
+                    )
+                }
             }
         }
     }

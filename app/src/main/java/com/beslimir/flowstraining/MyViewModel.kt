@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 
 class MyViewModel: ViewModel() {
@@ -26,6 +28,14 @@ class MyViewModel: ViewModel() {
             currValue--
             emit(currValue)
         }
+    }
+
+    //StateFlow
+    private val _stateFlow = MutableStateFlow("Hello")
+    val stateFlow = _stateFlow.asStateFlow()
+
+    fun triggerStateFlow() {
+        _stateFlow.value = "StateFlow"
     }
 
 }
