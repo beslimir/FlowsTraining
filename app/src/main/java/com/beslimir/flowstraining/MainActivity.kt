@@ -3,13 +3,13 @@ package com.beslimir.flowstraining
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -18,16 +18,42 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel = viewModel<MyViewModel>()
-            val time = viewModel.countDownFlow.collectAsState(initial = 10)
+            val timeFlow = viewModel.countDownFlow.collectAsState(initial = 10)
 
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = time.value.toString())
-            }
+                //cold flow
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(text = timeFlow.value.toString())
+                }
 
+                //live data
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.triggerLiveData()
+                        }
+                    ) {
+                        Text(text = "Live Data Button")
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = viewModel.liveData.value.toString()
+                    )
+                }
+
+                
+            }
         }
     }
 }
