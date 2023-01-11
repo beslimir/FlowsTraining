@@ -42,7 +42,7 @@ class MyViewModel: ViewModel() {
 
     //Channels
     private val _channel = Channel<Int>(100)
-    val channel = _channel.receiveAsFlow() //flow collected just once; receiveAsFlow supports multiple collectors
+    val channel = _channel.receiveAsFlow() //consumeAsFlow collects just once; receiveAsFlow supports multiple collectors
 
     fun triggerChannelData() {
         viewModelScope.launch {
