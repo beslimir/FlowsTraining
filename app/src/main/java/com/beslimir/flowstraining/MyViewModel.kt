@@ -42,7 +42,7 @@ class MyViewModel: ViewModel() {
 
     //Channels
     private val _channel = Channel<Int>(100)
-    val channel = _channel.consumeAsFlow() //flow collected just once; receiveAsFlow supports multiple collectors
+    val channel = _channel.receiveAsFlow() //flow collected just once; receiveAsFlow supports multiple collectors
 
     fun triggerChannelData() {
         viewModelScope.launch {
@@ -50,6 +50,16 @@ class MyViewModel: ViewModel() {
                 _channel.send(i)
                 delay(500L)
             }
+        }
+    }
+
+    //SharedFlow
+    private val _sharedFlow = MutableSharedFlow<String>()
+    val sharedFlow = _sharedFlow.asSharedFlow()
+
+    fun triggerSharedFlow() {
+        viewModelScope.launch {
+            _sharedFlow.emit("SharedFlow")
         }
     }
 

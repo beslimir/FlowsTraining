@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
             val timeFlow = viewModel.countDownFlow.collectAsState(initial = 10)
             val timeStateFlow = viewModel.stateFlow.collectAsState()
             val timeChannel = viewModel.channel.collectAsState(initial = 10)
+            val timeSharedFlow = viewModel.sharedFlow.collectAsState(initial = 10)
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -91,6 +92,25 @@ class MainActivity : ComponentActivity() {
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
                         text = timeChannel.value.toString()
+                    )
+                }
+
+                //SharedFlow
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.triggerSharedFlow()
+                        }
+                    ) {
+                        Text(text = "SharedFlow Button")
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = timeSharedFlow.value.toString()
                     )
                 }
             }
