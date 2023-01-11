@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             val timeFlow = viewModel.countDownFlow.collectAsState(initial = 10)
             val timeStateFlow = viewModel.stateFlow.collectAsState()
             val timeChannel = viewModel.channel.collectAsState(initial = 10)
-            val timeSharedFlow = viewModel.sharedFlow.collectAsState(initial = 10)
+            val timeSharedFlow = viewModel.sharedFlow.collectAsState(null)
 
             Column(
                 modifier = Modifier.fillMaxSize(),
