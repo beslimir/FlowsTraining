@@ -1,12 +1,14 @@
 package com.beslimir.flowstraining
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.channels.*
 
 class MyViewModel: ViewModel() {
 
@@ -36,6 +38,19 @@ class MyViewModel: ViewModel() {
 
     fun triggerStateFlow() {
         _stateFlow.value = "StateFlow"
+    }
+
+    //Channels
+    private val _channel = Channel<Int>(100)
+    val channel = _channel.consumeAsFlow() //flow collected just once; receiveAsFlow supports multiple collectors
+
+    fun triggerChannelData() {
+        viewModelScope.launch {
+            for (i in 10 downTo 0) {
+                _channel.send(i)
+                delay(500L)
+            }
+        }
     }
 
 }

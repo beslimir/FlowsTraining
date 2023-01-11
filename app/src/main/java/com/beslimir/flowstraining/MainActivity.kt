@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 
 class MainActivity : ComponentActivity() {
 
@@ -20,6 +22,7 @@ class MainActivity : ComponentActivity() {
             val viewModel = viewModel<MyViewModel>()
             val timeFlow = viewModel.countDownFlow.collectAsState(initial = 10)
             val timeStateFlow = viewModel.stateFlow.collectAsState()
+            val timeChannel = viewModel.channel.collectAsState(initial = 10)
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -69,6 +72,25 @@ class MainActivity : ComponentActivity() {
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
                         text = timeStateFlow.value
+                    )
+                }
+
+                //Channels
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.triggerChannelData()
+                        }
+                    ) {
+                        Text(text = "Channel Button")
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = timeChannel.value.toString()
                     )
                 }
             }
