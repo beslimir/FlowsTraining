@@ -1,16 +1,15 @@
 package com.beslimir.flowstraining
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.channels.*
 
-class MyViewModel: ViewModel() {
+class MyViewModel : ViewModel() {
 
     //LiveData
     private val _liveData = MutableLiveData("Hello")
@@ -42,7 +41,8 @@ class MyViewModel: ViewModel() {
 
     //Channels
     private val _channel = Channel<Int>(100)
-    val channel = _channel.receiveAsFlow() //consumeAsFlow collects just once; receiveAsFlow supports multiple collectors
+    val channel =
+        _channel.receiveAsFlow() //consumeAsFlow collects just once; receiveAsFlow supports multiple collectors
 
     fun triggerChannelData() {
         viewModelScope.launch {
@@ -61,6 +61,21 @@ class MyViewModel: ViewModel() {
         viewModelScope.launch {
             _sharedFlow.emit("SharedFlow")
         }
+    }
+
+    private fun showToastAfterTimerEnds() {
+        viewModelScope.launch {
+            for (i in 15 downTo 0) {
+                if (i == 0 || i == 10) {
+                    _sharedFlow.emit("Counter is $i!")
+                }
+                delay(1000L)
+            }
+        }
+    }
+
+    init {
+        showToastAfterTimerEnds()
     }
 
 }
